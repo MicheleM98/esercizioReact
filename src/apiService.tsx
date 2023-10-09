@@ -1,63 +1,90 @@
-import axios, { AxiosResponse } from 'axios';
+import axios from "axios";
 
-const baseUrl = 'https://62c96230d9ead251e8baf02e.mockapi.io/campus';
+const baseUrl = "https://62c96230d9ead251e8baf02e.mockapi.io/campus";
 
 interface User {
-    createdAt: string,
-    name: string,
-    avatar: string,
-    birthdate: string,
-    articlesIds: Array<number>,
-    id: string
+  createdAt: string;
+  name: string;
+  avatar: string;
+  birthdate: string;
+  articlesIds: Array<number>;
+  id: string;
 }
 
 interface Article {
-    createdAt: string,
-    name: string,
-    picture: string,
-    sellerId: string | number,
-    description: string,
-    buyUrl: string,
-    id: string
+  createdAt: string;
+  name: string;
+  picture: string;
+  sellerId: string | number;
+  description: string;
+  buyUrl: string;
+  id: string;
 }
 
+interface UpdateArticleRequest {
+  id: string;
+  article: Article;
+}
+
+interface UpdateUserRequest {
+  id: string;
+  user: User;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function promiseCall(apiPromise: Promise<any>): Promise<any> {
+  return new Promise((resolve, reject) => {
+    (async () => {
+      try {
+        const results = await apiPromise;
+        return resolve(results.data);
+      } catch (err) {
+        return reject(err);
+      }
+    })();
+  });
+}
 class ApiService {
-  async getUsers(): Promise<User[]> {
-    const response: AxiosResponse<User[]> = await axios.get(`${baseUrl}/users`);
-    return response.data;
+  getUsers(): Promise<User[]> {
+    return promiseCall(axios.get(`${baseUrl}/users`));
   }
 
-  async createUser(user: User): Promise<User> {
-    const response: AxiosResponse<User> = await axios.post(`${baseUrl}/users`, user);
-    return response.data;
+  createUser(user: User): Promise<User> {
+    return promiseCall(axios.post(`${baseUrl}/users`, user));
   }
 
-  async updateUser(id: string, user: User): Promise<User> {
-    const response: AxiosResponse<User> = await axios.put(`${baseUrl}/users/${id}`, user);
-    return response.data;
+  updateUser(updateUserRequest: UpdateUserRequest): Promise<User> {
+    return promiseCall(
+      axios.put(
+        `${baseUrl}/users/${updateUserRequest.id}`,
+        updateUserRequest.user
+      )
+    );
   }
 
-  async deleteUser(id: string): Promise<void> {
-    await axios.delete(`${baseUrl}/users/${id}`);
+  deleteUser(id: string): Promise<void> {
+    return promiseCall(axios.delete(`${baseUrl}/users/${id}`));
   }
 
-  async getArticles(): Promise<Article[]> {
-    const response: AxiosResponse<Article[]> = await axios.get(`${baseUrl}/articles`);
-    return response.data;
+  getArticles(): Promise<Article[]> {
+    return promiseCall(axios.get(`${baseUrl}/articles`));
   }
 
-  async createArticle(article: Article): Promise<Article> {
-    const response: AxiosResponse<Article> = await axios.post(`${baseUrl}/articles`, article);
-    return response.data;
+  createArticle(article: Article): Promise<Article> {
+    return promiseCall(axios.post(`${baseUrl}/articles`, article));
   }
 
-  async updateArticle(id: string, article: Article): Promise<Article> {
-    const response: AxiosResponse<Article> = await axios.put(`${baseUrl}/articles/${id}`, article);
-    return response.data;
+  updateArticle(updateArticleRequest: UpdateArticleRequest): Promise<Article> {
+    return promiseCall(
+      axios.put(
+        `${baseUrl}/articles/${updateArticleRequest.id}`,
+        updateArticleRequest.article
+      )
+    );
   }
 
-  async deleteArticle(id: string): Promise<void> {
-    await axios.delete(`${baseUrl}/articles/${id}`);
+  deleteArticle(id: string): Promise<void> {
+    return promiseCall(axios.delete(`${baseUrl}/articles/${id}`));
   }
 }
 
