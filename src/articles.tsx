@@ -280,6 +280,7 @@ export function Articles() {
         destroyOnClose={true}
         footer={null}
         onCancel={handleDetailsCancel}
+        afterClose={toggleDisable}
       >
         <Form {...layout} form={form} name="control-hooks">
           <Checkbox style={{ marginBottom: 20 }} onChange={toggleDisable}>

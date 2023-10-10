@@ -283,10 +283,11 @@ export function Users() {
       <Modal
         open={isDetailsModalOpen}
         onCancel={handleDetailsCancel}
+        afterClose={toggleDisable}
         destroyOnClose={true}
         footer={null}
       >
-        <Form {...layout} form={form} name="control-hooks">
+        <Form {...layout} form={form} name="control-hooks" preserve={false}>
           <Checkbox style={{ marginBottom: 20 }} onChange={toggleDisable}>
             Abilita modifica
           </Checkbox>
