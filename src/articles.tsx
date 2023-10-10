@@ -193,7 +193,6 @@ export function Articles() {
         {data?.map((article) => (
           <Col key={article.id} span={4}>
             <Card
-              hoverable
               style={{ margin: 10 }}
               cover={<CardCover src={article.picture} />}
               actions={[
@@ -235,7 +234,7 @@ export function Articles() {
             <Input />
           </Form.Item>
           <Form.Item
-            name="picture"
+            name="upload"
             label="Upload"
             valuePropName="fileList"
             getValueFromEvent={normFile}
@@ -298,7 +297,7 @@ export function Articles() {
             <Input defaultValue={name} disabled={disabled} />
           </Form.Item>
           <Form.Item
-            name="picture"
+            name="upload"
             label="Upload"
             valuePropName="fileList"
             getValueFromEvent={normFile}

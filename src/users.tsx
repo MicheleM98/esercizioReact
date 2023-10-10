@@ -177,7 +177,7 @@ export function Users() {
     if (Array.isArray(e)) {
       return e;
     }
-    return e?.fileList;
+    return e?.fileList || [];
   };
 
   return (
@@ -194,8 +194,7 @@ export function Users() {
         {data?.map((user) => (
           <Col key={user.id} span={4}>
             <Card
-              hoverable
-              style={{ width: 300, margin: 10 }}
+              style={{ margin: 10 }}
               cover={<CardCover src={user.avatar} />}
               actions={[
                 <EditOutlined
@@ -236,7 +235,7 @@ export function Users() {
             <Input />
           </Form.Item>
           <Form.Item
-            name="avatar"
+            name="upload"
             label="Upload"
             valuePropName="fileList"
             getValueFromEvent={normFile}
@@ -250,7 +249,7 @@ export function Users() {
                 const reader = new FileReader();
                 reader.readAsDataURL(file);
                 reader.onload = () => {
-                  form.setFieldValue("picture", reader.result);
+                  form.setFieldValue("avatar", reader.result);
                 };
                 return false;
               }}
@@ -297,13 +296,13 @@ export function Users() {
             label="Data Creazione"
             rules={[{ required: true }]}
           >
-            <Input defaultValue={createdAt} />
+            <Input defaultValue={createdAt} disabled={disabled} />
           </Form.Item>
           <Form.Item name="name" label="Nome" rules={[{ required: true }]}>
-            <Input defaultValue={name} />
+            <Input defaultValue={name} disabled={disabled} />
           </Form.Item>
           <Form.Item
-            name="avatar"
+            name="upload"
             label="Upload"
             valuePropName="fileList"
             getValueFromEvent={normFile}
@@ -318,7 +317,7 @@ export function Users() {
                 const reader = new FileReader();
                 reader.readAsDataURL(file);
                 reader.onload = () => {
-                  form.setFieldValue("picture", reader.result);
+                  form.setFieldValue("avatar", reader.result);
                 };
                 return false;
               }}
@@ -331,7 +330,7 @@ export function Users() {
             label="Data di Nascita"
             rules={[{ required: true }]}
           >
-            <Input defaultValue={birthdate} />
+            <Input defaultValue={birthdate} disabled={disabled} />
           </Form.Item>
           <Form.Item
             name="articlesIds"
@@ -339,6 +338,7 @@ export function Users() {
             rules={[{ required: true }]}
           >
             <Select
+              disabled={disabled}
               mode="multiple"
               allowClear
               style={{ width: "100%" }}
