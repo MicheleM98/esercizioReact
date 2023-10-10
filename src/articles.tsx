@@ -1,9 +1,22 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { Button, Card, Modal, Col, Row, Form, Input, Checkbox } from "antd";
+import {
+  Button,
+  Card,
+  Modal,
+  Col,
+  Row,
+  Form,
+  Input,
+  Checkbox,
+  Upload,
+} from "antd";
 import {
   EditOutlined,
   DeleteOutlined,
   PlusCircleOutlined,
+  UploadOutlined,
 } from "@ant-design/icons";
 import CardCover from "./components/cardCover";
 import Api from "./apiService";
@@ -73,7 +86,6 @@ export function Articles() {
   const { data, refetch } = useQuery<Article[]>(["article"], Api.getArticles, {
     keepPreviousData: true,
   });
-  console.log("data", data);
 
   const { mutateAsync: createArticle } = useMutation(Api.createArticle, {
     onSuccess: () => {
@@ -94,22 +106,36 @@ export function Articles() {
   });
 
   const handleCreateArticlesClick = async () => {
-    const newArticle = {
-      createdAt: form.getFieldValue("createdAt"),
-      name: form.getFieldValue("name"),
-      picture: form.getFieldValue("picture"),
-      sellerId: form.getFieldValue("sellerId"),
-      description: form.getFieldValue("description"),
-      buyUrl: form.getFieldValue("buyUrl"),
-      id: String(Math.random()),
-    };
-    try {
-      const createdArticle = await createArticle(newArticle);
-      console.log("Nuovo articolo creato:", createdArticle);
-      handleCreateCancel();
-    } catch (error) {
-      console.error("Errore durante la creazione dell'articolo:", error);
-    }
+    form.validateFields();
+    setTimeout(async () => {
+      const fieldErrors = form.getFieldsError([
+        "createdAt",
+        "name",
+        "picture",
+        "sellerId",
+        "description",
+        "buyUrl",
+      ]);
+      const isInvalid = fieldErrors.some((fe) => fe.errors.length > 0);
+      if (!isInvalid) {
+        const newArticle = {
+          createdAt: form.getFieldValue("createdAt"),
+          name: form.getFieldValue("name"),
+          picture: form.getFieldValue("picture"),
+          sellerId: form.getFieldValue("sellerId"),
+          description: form.getFieldValue("description"),
+          buyUrl: form.getFieldValue("buyUrl"),
+          id: String(Math.random()),
+        };
+        try {
+          const createdArticle = await createArticle(newArticle);
+          console.log("Nuovo articolo creato:", createdArticle);
+          handleCreateCancel();
+        } catch (error) {
+          console.error("Errore durante la creazione dell'articolo:", error);
+        }
+      }
+    });
   };
 
   const handleUpdateArticlesClick = async (articleId: string) => {
@@ -137,9 +163,6 @@ export function Articles() {
   const handleDeleteArticleClick = async (articleId: string) => {
     try {
       await deleteArticle(articleId);
-      if (isDetailsModalOpen) {
-        handleDetailsCancel();
-      }
       console.log(`Articolo con ID ${articleId} eliminato con successo.`);
     } catch (error) {
       console.error(
@@ -148,6 +171,14 @@ export function Articles() {
       );
     }
   };
+
+  const normFile = (e: any) => {
+    if (Array.isArray(e)) {
+      return e;
+    }
+    return e?.fileList;
+  };
+
   return (
     <>
       <Button
@@ -205,10 +236,26 @@ export function Articles() {
           </Form.Item>
           <Form.Item
             name="picture"
-            label="Immagine"
-            rules={[{ required: true }]}
+            label="Upload"
+            valuePropName="fileList"
+            getValueFromEvent={normFile}
           >
-            <Input />
+            <Upload
+              multiple={false}
+              maxCount={1}
+              name="logo"
+              listType="picture"
+              beforeUpload={(file) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => {
+                  form.setFieldValue("picture", reader.result);
+                };
+                return false;
+              }}
+            >
+              <Button icon={<UploadOutlined />}> Upload </Button>
+            </Upload>
           </Form.Item>
           <Form.Item
             name="sellerId"
@@ -252,10 +299,27 @@ export function Articles() {
           </Form.Item>
           <Form.Item
             name="picture"
-            label="Immagine"
-            rules={[{ required: true }]}
+            label="Upload"
+            valuePropName="fileList"
+            getValueFromEvent={normFile}
           >
-            <Input defaultValue={picture} disabled={disabled} />
+            <Upload
+              multiple={false}
+              maxCount={1}
+              disabled={disabled}
+              name="logo"
+              listType="picture"
+              beforeUpload={(file) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => {
+                  form.setFieldValue("picture", reader.result);
+                };
+                return false;
+              }}
+            >
+              <Button icon={<UploadOutlined />}>Upload</Button>
+            </Upload>
           </Form.Item>
           <Form.Item
             name="sellerId"

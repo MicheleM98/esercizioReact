@@ -22,7 +22,6 @@ const Navbar: React.FC = () => {
 
   const navigate = useNavigate();
 
-  console.log("current", current);
   const onClick: MenuProps["onClick"] = (e) => {
     setCurrent(e.key);
     navigate(`/${e.key}`);
