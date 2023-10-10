@@ -58,7 +58,6 @@ export function Users() {
   const [detailId, setDetailId] = useState("");
   const [createdAt, setCreatedAt] = useState("");
   const [name, setName] = useState("");
-  const [avatar, setAvatar] = useState("");
   const [birthdate, setBirtdate] = useState("");
   const [articlesIds, setArticlesIds] = useState("");
 
@@ -66,7 +65,6 @@ export function Users() {
     setIsDetailsModalOpen(true);
     setCreatedAt(user.createdAt);
     setName(user.name);
-    setAvatar(user.avatar);
     setBirtdate(user.birthdate);
     setArticlesIds(user.articlesIds as any);
     setDetailId(user.id);

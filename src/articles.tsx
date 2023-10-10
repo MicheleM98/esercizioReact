@@ -52,7 +52,6 @@ export function Articles() {
 
   const [createdAt, setCreatedAt] = useState("");
   const [name, setName] = useState("");
-  const [picture, setPicture] = useState("");
   const [sellerId, setSellerId] = useState("");
   const [description, setDescription] = useState("");
   const [buyUrl, setbuyUrl] = useState("");
@@ -64,7 +63,6 @@ export function Articles() {
     setIsDetailsModalOpen(true);
     setCreatedAt(article.createdAt);
     setName(article.name);
-    setPicture(article.picture);
     setSellerId(String(article.sellerId));
     setDescription(article.description);
     setbuyUrl(article.buyUrl);
