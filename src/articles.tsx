@@ -193,7 +193,7 @@ export function Articles() {
         {data?.map((article) => (
           <Col key={article.id} span={4}>
             <Card
-              style={{ margin: 10 }}
+              style={{ margin: 10, height: 365 }}
               cover={<CardCover src={article.picture} />}
               actions={[
                 <EditOutlined
@@ -222,6 +222,7 @@ export function Articles() {
           form={form}
           name="control-hooks"
           style={{ maxWidth: 600 }}
+          preserve={false}
         >
           <Form.Item
             name="createdAt"

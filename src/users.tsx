@@ -194,7 +194,7 @@ export function Users() {
         {data?.map((user) => (
           <Col key={user.id} span={4}>
             <Card
-              style={{ margin: 10 }}
+              style={{ margin: 10, height: 365 }}
               cover={<CardCover src={user.avatar} />}
               actions={[
                 <EditOutlined
@@ -223,6 +223,7 @@ export function Users() {
           form={form}
           name="control-hooks"
           style={{ maxWidth: 600 }}
+          preserve={false}
         >
           <Form.Item
             name="createdAt"
