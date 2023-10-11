@@ -144,7 +144,12 @@ function singleUser() {
           <Title level={4}>{user?.articlesIds}</Title>
           <Divider />
           <Link to="/users">
-            <Button type="primary">Home</Button>
+            <Button
+              style={{ margin: 20, fontSize: 20, height: 40 }}
+              type="primary"
+            >
+              Home
+            </Button>
           </Link>
           <Button
             style={{ margin: 20, fontSize: 20, height: 40 }}
