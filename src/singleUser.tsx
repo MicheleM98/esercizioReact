@@ -5,14 +5,14 @@ import { useQuery } from "@tanstack/react-query";
 import { Typography, Divider, Col, Row } from "antd";
 import { Image } from "antd";
 
-function singleArticle() {
+function singleUser() {
   const { id } = useParams();
   const { Title } = Typography;
   const {
-    data: article,
+    data: user,
     isLoading,
     isError,
-  } = useQuery(["article", id], () => Api.getArticleById(String(id)));
+  } = useQuery(["user", id], () => Api.getUserById(String(id)));
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -29,7 +29,7 @@ function singleArticle() {
           height={500}
           style={{ objectFit: "none" }}
           src="error"
-          fallback={article.picture}
+          fallback={user.avatar}
         />
       </Col>
       <Col span={1}></Col>
@@ -37,32 +37,26 @@ function singleArticle() {
         <Title level={1} style={{ color: "#141414" }}>
           Data di creazione
         </Title>
-        <Title level={2}>{article.createdAt}</Title>
+        <Title level={2}>{user.createdAt}</Title>
         <Divider />
         <Title level={1} style={{ color: "#141414" }}>
-          Titolo
+          Nome
         </Title>
-        <Title level={2}>{article.name}</Title>
+        <Title level={2}>{user.name}</Title>
         <Divider />
         <Title level={1} style={{ color: "#141414" }}>
-          Descrizione
+          Data di nascita
         </Title>
-        <Title level={2}>{article.description}</Title>
+        <Title level={2}>{user.birthdate}</Title>
         <Divider />
         <Title level={1} style={{ color: "#141414" }}>
-          Venditore
+          Articoli in vendita
         </Title>
-        <Title level={2}>{article.sellerId}</Title>
-        <Divider />
-        <Title level={1} style={{ color: "#141414" }}>
-          Url
-        </Title>
-        <Title level={2}>{article.buyUrl}</Title>
-        <Divider />
+        <Title level={2}>{user.articlesIds}</Title>
       </Col>
       <Col span={1}></Col>
     </Row>
   );
 }
 
-export default singleArticle;
+export default singleUser;

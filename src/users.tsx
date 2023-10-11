@@ -21,6 +21,7 @@ import {
 import CardCover from "./components/cardCover";
 import Api from "./apiService";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 import type { SelectProps } from "antd";
 
@@ -204,7 +205,14 @@ export function Users() {
                 />,
               ]}
             >
-              <Meta title={user.name} description={user.createdAt} />
+              <Meta
+                title={
+                  <Link style={{ color: "#FF6347" }} to={`/user/${user.id}`}>
+                    {user.name}
+                  </Link>
+                }
+                description={user.createdAt}
+              />
             </Card>
           </Col>
         ))}
