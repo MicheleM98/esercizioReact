@@ -14,8 +14,8 @@ import {
   Modal,
   Checkbox,
   Upload,
+  Image,
 } from "antd";
-import { Image } from "antd";
 import { useState } from "react";
 import { UploadOutlined } from "@ant-design/icons";
 
@@ -31,20 +31,9 @@ type Article = {
 
 function singleArticle() {
   const { id } = useParams();
-  const { Title } = Typography;
-  const {
-    data: article,
-    isLoading,
-    isError,
-    refetch,
-  } = useQuery(["article", id], () => Api.getArticleById(String(id)));
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (isError) {
-    return <div>Error loading article</div>;
-  }
+  const { data: article, refetch } = useQuery(["article", id], () =>
+    Api.getArticleById(String(id))
+  );
 
   const { mutateAsync: updateArticle } = useMutation(Api.updateArticle, {
     onSuccess: () => {
@@ -117,6 +106,8 @@ function singleArticle() {
     }
   };
 
+  const { Title } = Typography;
+
   return (
     <>
       <Row>
@@ -126,7 +117,7 @@ function singleArticle() {
             height={500}
             style={{ objectFit: "none" }}
             src="error"
-            fallback={article.picture}
+            fallback={article?.picture}
           />
         </Col>
         <Col span={1}></Col>
@@ -134,27 +125,27 @@ function singleArticle() {
           <Title level={2} style={{ color: "#141414" }}>
             Data di creazione:
           </Title>
-          <Title level={4}>{article.createdAt}</Title>
+          <Title level={4}>{article?.createdAt}</Title>
           <Divider />
           <Title level={2} style={{ color: "#141414" }}>
             Titolo:
           </Title>
-          <Title level={4}>{article.name}</Title>
+          <Title level={4}>{article?.name}</Title>
           <Divider />
           <Title level={2} style={{ color: "#141414" }}>
             Descrizione:
           </Title>
-          <Title level={4}>{article.description}</Title>
+          <Title level={4}>{article?.description}</Title>
           <Divider />
           <Title level={2} style={{ color: "#141414" }}>
             Venditore:
           </Title>
-          <Title level={4}>{article.sellerId}</Title>
+          <Title level={4}>{article?.sellerId}</Title>
           <Divider />
           <Title level={2} style={{ color: "#141414" }}>
             Url:
           </Title>
-          <Title level={4}>{article.buyUrl}</Title>
+          <Title level={4}>{article?.buyUrl}</Title>
           <Divider />
           <Link to="/articles">
             <Button
