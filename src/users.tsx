@@ -63,7 +63,8 @@ export function Users() {
 
   const showDetailsModal = (user: User) => {
     setIsDetailsModalOpen(true);
-    setCreatedAt(user.createdAt);
+    const createdAtDate = new Date(user.createdAt);
+    setCreatedAt(createdAtDate.toDateString());
     setName(user.name);
     setBirtdate(user.birthdate);
     setArticlesIds(user.articlesIds as any);
@@ -211,7 +212,7 @@ export function Users() {
                     {user.name}
                   </Link>
                 }
-                description={user.createdAt}
+                description={user.birthdate}
               />
             </Card>
           </Col>

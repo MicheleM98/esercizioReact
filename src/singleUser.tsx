@@ -51,7 +51,8 @@ function singleUser() {
 
   const showDetailsModal = (user: User) => {
     setIsDetailsModalOpen(true);
-    setCreatedAt(user.createdAt);
+    const createdAtDate = new Date(user.createdAt);
+    setCreatedAt(createdAtDate.toDateString());
     setName(user.name);
     setBirtdate(user.birthdate);
     setArticlesIds(user.articlesIds as any);
@@ -108,7 +109,7 @@ function singleUser() {
     labelCol: { span: 6 },
     wrapperCol: { span: 17 },
   };
-
+  const creationDate = new Date(user?.createdAt);
   return (
     <>
       <Row>
@@ -126,7 +127,7 @@ function singleUser() {
           <Title level={2} style={{ color: "#141414" }}>
             Data di creazione:
           </Title>
-          <Title level={4}>{user?.createdAt}</Title>
+          <Title level={4}>{String(creationDate)}</Title>
           <Divider />
           <Title level={2} style={{ color: "#141414" }}>
             Nome:

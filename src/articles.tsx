@@ -61,7 +61,8 @@ export function Articles() {
 
   const showDetailsModal = (article: Article) => {
     setIsDetailsModalOpen(true);
-    setCreatedAt(article.createdAt);
+    const createdAtDate = new Date(article.createdAt);
+    setCreatedAt(createdAtDate.toDateString());
     setName(article.name);
     setSellerId(String(article.sellerId));
     setDescription(article.description);
@@ -213,7 +214,7 @@ export function Articles() {
                     {article.name}
                   </Link>
                 }
-                description={article.createdAt}
+                description={article.buyUrl}
               />
             </Card>
           </Col>

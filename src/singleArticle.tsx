@@ -52,7 +52,8 @@ function singleArticle() {
 
   const showDetailsModal = (article: Article) => {
     setIsDetailsModalOpen(true);
-    setCreatedAt(article.createdAt);
+    const createdAtDate = new Date(article.createdAt);
+    setCreatedAt(createdAtDate.toDateString());
     setName(article.name);
     setSellerId(String(article.sellerId));
     setDescription(article.description);
@@ -108,6 +109,8 @@ function singleArticle() {
 
   const { Title } = Typography;
 
+  const creationDate = new Date(article?.createdAt);
+
   return (
     <>
       <Row>
@@ -125,7 +128,7 @@ function singleArticle() {
           <Title level={2} style={{ color: "#141414" }}>
             Data di creazione:
           </Title>
-          <Title level={4}>{article?.createdAt}</Title>
+          <Title level={4}>{String(creationDate)}</Title>
           <Divider />
           <Title level={2} style={{ color: "#141414" }}>
             Titolo:
