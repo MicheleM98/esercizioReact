@@ -1,8 +1,8 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import Api from "./apiService";
 import { useQuery } from "@tanstack/react-query";
-import { Typography, Divider, Col, Row } from "antd";
+import { Typography, Divider, Col, Row, Button } from "antd";
 import { Image } from "antd";
 
 function singleArticle() {
@@ -34,31 +34,34 @@ function singleArticle() {
       </Col>
       <Col span={1}></Col>
       <Col span={14}>
-        <Title level={1} style={{ color: "#141414" }}>
-          Data di creazione
+        <Title level={2} style={{ color: "#141414" }}>
+          Data di creazione:
         </Title>
-        <Title level={2}>{article.createdAt}</Title>
+        <Title level={4}>{article.createdAt}</Title>
         <Divider />
-        <Title level={1} style={{ color: "#141414" }}>
-          Titolo
+        <Title level={2} style={{ color: "#141414" }}>
+          Titolo:
         </Title>
-        <Title level={2}>{article.name}</Title>
+        <Title level={4}>{article.name}</Title>
         <Divider />
-        <Title level={1} style={{ color: "#141414" }}>
-          Descrizione
+        <Title level={2} style={{ color: "#141414" }}>
+          Descrizione:
         </Title>
-        <Title level={2}>{article.description}</Title>
+        <Title level={4}>{article.description}</Title>
         <Divider />
-        <Title level={1} style={{ color: "#141414" }}>
-          Venditore
+        <Title level={2} style={{ color: "#141414" }}>
+          Venditore:
         </Title>
-        <Title level={2}>{article.sellerId}</Title>
+        <Title level={4}>{article.sellerId}</Title>
         <Divider />
-        <Title level={1} style={{ color: "#141414" }}>
-          Url
+        <Title level={2} style={{ color: "#141414" }}>
+          Url:
         </Title>
-        <Title level={2}>{article.buyUrl}</Title>
+        <Title level={4}>{article.buyUrl}</Title>
         <Divider />
+        <Link to="/articles">
+          <Button type="primary">Home</Button>
+        </Link>
       </Col>
       <Col span={1}></Col>
     </Row>
