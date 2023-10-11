@@ -53,6 +53,10 @@ class ApiService {
     return promiseCall(axios.post(`${baseUrl}/users`, user));
   }
 
+  getUserById(id: string): Promise<User> {
+    return promiseCall(axios.get(`${baseUrl}/users/${id}`));
+  }
+
   updateUser(updateUserRequest: UpdateUserRequest): Promise<User> {
     return promiseCall(
       axios.put(
@@ -72,6 +76,10 @@ class ApiService {
 
   createArticle(article: Article): Promise<Article> {
     return promiseCall(axios.post(`${baseUrl}/articles`, article));
+  }
+
+  getArticleById(id: string): Promise<Article> {
+    return promiseCall(axios.get(`${baseUrl}/articles/${id}`));
   }
 
   updateArticle(updateArticleRequest: UpdateArticleRequest): Promise<Article> {
