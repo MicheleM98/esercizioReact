@@ -20,7 +20,7 @@ import {
 import CardCover from "./components/cardCover";
 import Api from "./apiService";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import LinkMod from "./components/link";
 
 const { Meta } = Card;
 
@@ -206,14 +206,7 @@ export function Articles() {
               ]}
             >
               <Meta
-                title={
-                  <Link
-                    style={{ color: "#FF6347" }}
-                    to={`/article/${article.id}`}
-                  >
-                    {article.name}
-                  </Link>
-                }
+                title={<LinkMod id={article.id} title={article.name} />}
                 description={article.buyUrl}
               />
             </Card>

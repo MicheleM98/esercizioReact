@@ -18,6 +18,7 @@ import {
 } from "antd";
 import { useState } from "react";
 import { UploadOutlined } from "@ant-design/icons";
+import TitleMod from "./components/title";
 
 type Article = {
   createdAt: string;
@@ -125,29 +126,19 @@ function singleArticle() {
         </Col>
         <Col span={1}></Col>
         <Col span={14}>
-          <Title level={2} style={{ color: "#141414" }}>
-            Data di creazione:
-          </Title>
+          <TitleMod level={2} title="Data di creazione:" />
           <Title level={4}>{String(creationDate)}</Title>
           <Divider />
-          <Title level={2} style={{ color: "#141414" }}>
-            Titolo:
-          </Title>
+          <TitleMod level={2} title="Titolo:" />
           <Title level={4}>{article?.name}</Title>
           <Divider />
-          <Title level={2} style={{ color: "#141414" }}>
-            Descrizione:
-          </Title>
+          <TitleMod level={2} title="Descrizione:" />
           <Title level={4}>{article?.description}</Title>
           <Divider />
-          <Title level={2} style={{ color: "#141414" }}>
-            Venditore:
-          </Title>
+          <TitleMod level={2} title="Venditore:" />
           <Title level={4}>{article?.sellerId}</Title>
           <Divider />
-          <Title level={2} style={{ color: "#141414" }}>
-            Url:
-          </Title>
+          <TitleMod level={2} title="Url:" />
           <Title level={4}>{article?.buyUrl}</Title>
           <Divider />
           <Link to="/articles">

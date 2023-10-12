@@ -21,7 +21,7 @@ import {
 import CardCover from "./components/cardCover";
 import Api from "./apiService";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import LinkMod from "./components/link";
 
 import type { SelectProps } from "antd";
 
@@ -207,11 +207,7 @@ export function Users() {
               ]}
             >
               <Meta
-                title={
-                  <Link style={{ color: "#FF6347" }} to={`/user/${user.id}`}>
-                    {user.name}
-                  </Link>
-                }
+                title={<LinkMod id={user.id} title={user.name} />}
                 description={user.birthdate}
               />
             </Card>
