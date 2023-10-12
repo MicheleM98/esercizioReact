@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useQuery, useMutation } from "@tanstack/react-query";
 import {
   Button,
@@ -24,6 +23,7 @@ import LinkMod from "../components/link";
 import { ArticleType } from "../utils/article-type";
 
 const { Meta } = Card;
+const { TextArea } = Input;
 
 const layout = {
   labelCol: { span: 6 },
@@ -31,6 +31,7 @@ const layout = {
 };
 
 export function Articles() {
+  const [form] = Form.useForm();
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
   const showCreateModal = () => {
@@ -65,8 +66,6 @@ export function Articles() {
     setIsDetailsModalOpen(false);
   };
 
-  const [form] = Form.useForm();
-  const { TextArea } = Input;
   const [disabled, setDisabled] = useState(true);
 
   const toggleDisable = () => {
@@ -122,8 +121,7 @@ export function Articles() {
           id: String(Math.random()),
         };
         try {
-          const createdArticle = await createArticle(newArticle);
-          console.log("Nuovo articolo creato:", createdArticle);
+          await createArticle(newArticle);
           handleCreateCancel();
         } catch (error) {
           console.error("Errore durante la creazione dell'articolo:", error);

@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable react-hooks/rules-of-hooks */
 import { Link, useParams } from "react-router-dom";
 import Api from "../services/apiService";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -22,16 +20,7 @@ import { useState } from "react";
 import { UploadOutlined } from "@ant-design/icons";
 import DetailTitle from "../components/detail-title";
 
-type User = {
-  createdAt: string;
-  name: string;
-  avatar: string;
-  birthdate: string;
-  articlesIds: Array<number>;
-  id: string;
-};
-
-function singleUser() {
+function SingleUser() {
   const { id } = useParams();
   const { data: user, refetch } = useQuery(["user", id], () =>
     Api.getUserById(String(id))
@@ -330,4 +319,4 @@ function singleUser() {
   );
 }
 
-export default singleUser;
+export default SingleUser;
