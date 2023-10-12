@@ -99,133 +99,135 @@ function SingleArticle() {
 
   const { Title } = Typography;
 
-  const creationDate = new Date(article?.createdAt);
+  if (article) {
+    const creationDate = new Date(article.createdAt);
 
-  return (
-    <>
-      <Row>
-        <Col span={1}></Col>
-        <Col span={7}>
-          <Image
-            height={500}
-            style={{ objectFit: "none" }}
-            src="error"
-            fallback={article?.picture}
-          />
-        </Col>
-        <Col span={1}></Col>
-        <Col span={14}>
-          <DetailTitle level={2} title="Data di creazione:" />
-          <Title level={4}>{String(creationDate)}</Title>
-          <Divider />
-          <DetailTitle level={2} title="Titolo:" />
-          <Title level={4}>{article?.name}</Title>
-          <Divider />
-          <DetailTitle level={2} title="Descrizione:" />
-          <Title level={4}>{article?.description}</Title>
-          <Divider />
-          <DetailTitle level={2} title="Venditore:" />
-          <Title level={4}>{article?.sellerId}</Title>
-          <Divider />
-          <DetailTitle level={2} title="Url:" />
-          <Title level={4}>{article?.buyUrl}</Title>
-          <Divider />
-          <Link to="/articles">
+    return (
+      <>
+        <Row>
+          <Col span={1}></Col>
+          <Col span={7}>
+            <Image
+              height={500}
+              style={{ objectFit: "none" }}
+              src="error"
+              fallback={article?.picture}
+            />
+          </Col>
+          <Col span={1}></Col>
+          <Col span={14}>
+            <DetailTitle level={2} title="Data di creazione:" />
+            <Title level={4}>{String(creationDate)}</Title>
+            <Divider />
+            <DetailTitle level={2} title="Titolo:" />
+            <Title level={4}>{article?.name}</Title>
+            <Divider />
+            <DetailTitle level={2} title="Descrizione:" />
+            <Title level={4}>{article?.description}</Title>
+            <Divider />
+            <DetailTitle level={2} title="Venditore:" />
+            <Title level={4}>{article?.sellerId}</Title>
+            <Divider />
+            <DetailTitle level={2} title="Url:" />
+            <Title level={4}>{article?.buyUrl}</Title>
+            <Divider />
+            <Link to="/articles">
+              <Button
+                style={{ margin: 20, fontSize: 20, height: 40 }}
+                type="primary"
+              >
+                Home
+              </Button>
+            </Link>
             <Button
               style={{ margin: 20, fontSize: 20, height: 40 }}
               type="primary"
+              onClick={() => showDetailsModal(article)}
             >
-              Home
+              Modifica articolo
             </Button>
-          </Link>
-          <Button
-            style={{ margin: 20, fontSize: 20, height: 40 }}
-            type="primary"
-            onClick={() => showDetailsModal(article)}
-          >
-            Modifica articolo
-          </Button>
-        </Col>
-        <Col span={1}></Col>
-      </Row>
-      <Modal
-        open={isDetailsModalOpen}
-        destroyOnClose={true}
-        footer={null}
-        onCancel={handleDetailsCancel}
-        afterClose={toggleDisable}
-      >
-        <Form {...layout} form={form} name="control-hooks">
-          <Checkbox style={{ marginBottom: 20 }} onChange={toggleDisable}>
-            Abilita modifica
-          </Checkbox>
-          <Form.Item
-            name="createdAt"
-            label="Data Creazione"
-            rules={[{ required: true }]}
-          >
-            <Input defaultValue={createdAt} disabled={disabled} />
-          </Form.Item>
-          <Form.Item name="name" label="Nome" rules={[{ required: true }]}>
-            <Input defaultValue={name} disabled={disabled} />
-          </Form.Item>
-          <Form.Item
-            name="upload"
-            label="Upload"
-            valuePropName="fileList"
-            getValueFromEvent={normFile}
-          >
-            <Upload
-              multiple={false}
-              maxCount={1}
-              disabled={disabled}
-              name="logo"
-              listType="picture"
-              beforeUpload={(file) => {
-                const reader = new FileReader();
-                reader.readAsDataURL(file);
-                reader.onload = () => {
-                  form.setFieldValue("picture", reader.result);
-                };
-                return false;
-              }}
-            >
-              <Button icon={<UploadOutlined />}>Upload</Button>
-            </Upload>
-          </Form.Item>
-          <Form.Item
-            name="sellerId"
-            label="Venditore"
-            rules={[{ required: true }]}
-          >
-            <Input defaultValue={sellerId} disabled={disabled} />
-          </Form.Item>
-          <Form.Item
-            name="description"
-            label="Descrizione"
-            rules={[{ required: true }]}
-          >
-            <TextArea
-              rows={15}
-              defaultValue={description}
-              disabled={disabled}
-            />
-          </Form.Item>
-          <Form.Item name="buyUrl" label="Url" rules={[{ required: true }]}>
-            <Input defaultValue={buyUrl} disabled={disabled} />
-          </Form.Item>
-        </Form>
-        <Button
-          style={{ margin: 10 }}
-          onClick={() => handleUpdateArticlesClick(detailId)}
-          disabled={disabled}
-          type="primary"
+          </Col>
+          <Col span={1}></Col>
+        </Row>
+        <Modal
+          open={isDetailsModalOpen}
+          destroyOnClose={true}
+          footer={null}
+          onCancel={handleDetailsCancel}
+          afterClose={toggleDisable}
         >
-          Salva modifiche
-        </Button>
-      </Modal>
-    </>
-  );
+          <Form {...layout} form={form} name="control-hooks">
+            <Checkbox style={{ marginBottom: 20 }} onChange={toggleDisable}>
+              Abilita modifica
+            </Checkbox>
+            <Form.Item
+              name="createdAt"
+              label="Data Creazione"
+              rules={[{ required: true }]}
+            >
+              <Input defaultValue={createdAt} disabled={disabled} />
+            </Form.Item>
+            <Form.Item name="name" label="Nome" rules={[{ required: true }]}>
+              <Input defaultValue={name} disabled={disabled} />
+            </Form.Item>
+            <Form.Item
+              name="upload"
+              label="Upload"
+              valuePropName="fileList"
+              getValueFromEvent={normFile}
+            >
+              <Upload
+                multiple={false}
+                maxCount={1}
+                disabled={disabled}
+                name="logo"
+                listType="picture"
+                beforeUpload={(file) => {
+                  const reader = new FileReader();
+                  reader.readAsDataURL(file);
+                  reader.onload = () => {
+                    form.setFieldValue("picture", reader.result);
+                  };
+                  return false;
+                }}
+              >
+                <Button icon={<UploadOutlined />}>Upload</Button>
+              </Upload>
+            </Form.Item>
+            <Form.Item
+              name="sellerId"
+              label="Venditore"
+              rules={[{ required: true }]}
+            >
+              <Input defaultValue={sellerId} disabled={disabled} />
+            </Form.Item>
+            <Form.Item
+              name="description"
+              label="Descrizione"
+              rules={[{ required: true }]}
+            >
+              <TextArea
+                rows={15}
+                defaultValue={description}
+                disabled={disabled}
+              />
+            </Form.Item>
+            <Form.Item name="buyUrl" label="Url" rules={[{ required: true }]}>
+              <Input defaultValue={buyUrl} disabled={disabled} />
+            </Form.Item>
+          </Form>
+          <Button
+            style={{ margin: 10 }}
+            onClick={() => handleUpdateArticlesClick(detailId)}
+            disabled={disabled}
+            type="primary"
+          >
+            Salva modifiche
+          </Button>
+        </Modal>
+      </>
+    );
+  }
 }
 
 export default SingleArticle;
