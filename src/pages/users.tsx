@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useQuery, useMutation } from "@tanstack/react-query";
 import {
   Button,
@@ -8,7 +9,6 @@ import {
   Form,
   Input,
   Select,
-  Checkbox,
   Upload,
 } from "antd";
 import {
@@ -67,11 +67,6 @@ export function Users() {
   };
 
   const [form] = Form.useForm();
-  const [disabled, setDisabled] = useState(true);
-
-  const toggleDisable = () => {
-    setDisabled(!disabled);
-  };
 
   const { data, refetch } = useQuery<UserType[]>(["users"], Api.getUsers, {
     keepPreviousData: true,
@@ -115,14 +110,8 @@ export function Users() {
           articlesIds: form.getFieldValue("articlesIds"),
           id: String(Math.random()),
         };
-
-        try {
-          const createdUser = await createUser(newUser);
-          console.log("Nuovo utente creato:", createdUser);
-          handleCreateCancel();
-        } catch (error) {
-          console.error("Errore durante la creazione dell'utente:", error);
-        }
+        await createUser(newUser);
+        handleCreateCancel();
       }
     });
   };
@@ -136,25 +125,12 @@ export function Users() {
       articlesIds: form.getFieldValue("articlesIds"),
       id: userId,
     };
-    try {
-      const modifiedUser = await updateUser({ id: userId, user: updatedUser });
-      console.log("Utente modificate:", modifiedUser);
-      handleDetailsCancel();
-    } catch (error) {
-      console.error("Errore durante la modifica dell'utente:", error);
-    }
+    await updateUser({ id: userId, user: updatedUser });
+    handleDetailsCancel();
   };
 
   const handleDeleteUserClick = async (userId: string) => {
-    try {
-      await deleteUser(userId);
-      console.log(`Utente con ID ${userId} eliminato con successo.`);
-    } catch (error) {
-      console.error(
-        `Errore durante l'eliminazione dell'utente con ID ${userId}:`,
-        error
-      );
-    }
+    await deleteUser(userId);
   };
 
   const handleSelectSearch = (text: string) => {
@@ -278,23 +254,19 @@ export function Users() {
       <Modal
         open={isDetailsModalOpen}
         onCancel={handleDetailsCancel}
-        afterClose={toggleDisable}
         destroyOnClose={true}
         footer={null}
       >
         <Form {...layout} form={form} name="control-hooks" preserve={false}>
-          <Checkbox style={{ marginBottom: 20 }} onChange={toggleDisable}>
-            Abilita modifica
-          </Checkbox>
           <Form.Item
             name="createdAt"
             label="Data Creazione"
             rules={[{ required: true }]}
           >
-            <Input defaultValue={createdAt} disabled={disabled} />
+            <Input defaultValue={createdAt} />
           </Form.Item>
           <Form.Item name="name" label="Nome" rules={[{ required: true }]}>
-            <Input defaultValue={name} disabled={disabled} />
+            <Input defaultValue={name} />
           </Form.Item>
           <Form.Item
             name="upload"
@@ -305,7 +277,6 @@ export function Users() {
             <Upload
               multiple={false}
               maxCount={1}
-              disabled={disabled}
               name="logo"
               listType="picture"
               beforeUpload={(file) => {
@@ -325,7 +296,7 @@ export function Users() {
             label="Data di Nascita"
             rules={[{ required: true }]}
           >
-            <Input defaultValue={birthdate} disabled={disabled} />
+            <Input defaultValue={birthdate} />
           </Form.Item>
           <Form.Item
             name="articlesIds"
@@ -333,7 +304,6 @@ export function Users() {
             rules={[{ required: true }]}
           >
             <Select
-              disabled={disabled}
               mode="multiple"
               allowClear
               style={{ width: "100%" }}
@@ -347,7 +317,6 @@ export function Users() {
         <Button
           style={{ margin: 10 }}
           onClick={() => handleUpdateArticlesClick(detailId)}
-          disabled={disabled}
           type="primary"
         >
           Salva modifiche

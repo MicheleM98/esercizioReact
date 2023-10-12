@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Link, useParams } from "react-router-dom";
 import Api from "../services/apiService";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -10,7 +11,6 @@ import {
   Form,
   Input,
   Modal,
-  Checkbox,
   Upload,
   Image,
 } from "antd";
@@ -57,11 +57,6 @@ function SingleArticle() {
 
   const [form] = Form.useForm();
   const { TextArea } = Input;
-  const [disabled, setDisabled] = useState(true);
-
-  const toggleDisable = () => {
-    setDisabled(!disabled);
-  };
 
   const layout = {
     labelCol: { span: 6 },
@@ -85,16 +80,11 @@ function SingleArticle() {
       buyUrl: form.getFieldValue("buyUrl"),
       id: articleId,
     };
-    try {
-      const modifiedArticle = await updateArticle({
-        id: articleId,
-        article: updatedArticle,
-      });
-      console.log("Articolo modificate:", modifiedArticle);
-      handleDetailsCancel();
-    } catch (error) {
-      console.error("Errore durante la modifica dell'articolo:", error);
-    }
+    await updateArticle({
+      id: articleId,
+      article: updatedArticle,
+    });
+    handleDetailsCancel();
   };
 
   const { Title } = Typography;
@@ -154,21 +144,17 @@ function SingleArticle() {
           destroyOnClose={true}
           footer={null}
           onCancel={handleDetailsCancel}
-          afterClose={toggleDisable}
         >
           <Form {...layout} form={form} name="control-hooks">
-            <Checkbox style={{ marginBottom: 20 }} onChange={toggleDisable}>
-              Abilita modifica
-            </Checkbox>
             <Form.Item
               name="createdAt"
               label="Data Creazione"
               rules={[{ required: true }]}
             >
-              <Input defaultValue={createdAt} disabled={disabled} />
+              <Input defaultValue={createdAt} />
             </Form.Item>
             <Form.Item name="name" label="Nome" rules={[{ required: true }]}>
-              <Input defaultValue={name} disabled={disabled} />
+              <Input defaultValue={name} />
             </Form.Item>
             <Form.Item
               name="upload"
@@ -179,7 +165,6 @@ function SingleArticle() {
               <Upload
                 multiple={false}
                 maxCount={1}
-                disabled={disabled}
                 name="logo"
                 listType="picture"
                 beforeUpload={(file) => {
@@ -199,27 +184,22 @@ function SingleArticle() {
               label="Venditore"
               rules={[{ required: true }]}
             >
-              <Input defaultValue={sellerId} disabled={disabled} />
+              <Input defaultValue={sellerId} />
             </Form.Item>
             <Form.Item
               name="description"
               label="Descrizione"
               rules={[{ required: true }]}
             >
-              <TextArea
-                rows={15}
-                defaultValue={description}
-                disabled={disabled}
-              />
+              <TextArea rows={15} defaultValue={description} />
             </Form.Item>
             <Form.Item name="buyUrl" label="Url" rules={[{ required: true }]}>
-              <Input defaultValue={buyUrl} disabled={disabled} />
+              <Input defaultValue={buyUrl} />
             </Form.Item>
           </Form>
           <Button
             style={{ margin: 10 }}
             onClick={() => handleUpdateArticlesClick(detailId)}
-            disabled={disabled}
             type="primary"
           >
             Salva modifiche

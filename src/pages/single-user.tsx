@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Link, useParams } from "react-router-dom";
 import Api from "../services/apiService";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -10,7 +11,6 @@ import {
   Form,
   Input,
   Modal,
-  Checkbox,
   Upload,
   Image,
   Select,
@@ -55,11 +55,6 @@ function SingleUser() {
   };
 
   const [form] = Form.useForm();
-  const [disabled, setDisabled] = useState(true);
-
-  const toggleDisable = () => {
-    setDisabled(!disabled);
-  };
 
   const handleUpdateArticlesClick = async (userId: string) => {
     const updatedUser = {
@@ -70,13 +65,9 @@ function SingleUser() {
       articlesIds: form.getFieldValue("articlesIds"),
       id: userId,
     };
-    try {
-      const modifiedUser = await updateUser({ id: userId, user: updatedUser });
-      console.log("Utente modificate:", modifiedUser);
-      handleDetailsCancel();
-    } catch (error) {
-      console.error("Errore durante la modifica dell'utente:", error);
-    }
+    const modifiedUser = await updateUser({ id: userId, user: updatedUser });
+    console.log("Utente modificate:", modifiedUser);
+    handleDetailsCancel();
   };
 
   const options: SelectProps["options"] = [];
@@ -149,7 +140,6 @@ function SingleUser() {
         <Modal
           open={isDetailsModalOpen}
           onCancel={handleDetailsCancel}
-          afterClose={toggleDisable}
           destroyOnClose={true}
           footer={null}
         >
@@ -158,7 +148,6 @@ function SingleUser() {
               <Modal
                 open={isDetailsModalOpen}
                 onCancel={handleDetailsCancel}
-                afterClose={toggleDisable}
                 destroyOnClose={true}
                 footer={null}
               >
@@ -168,25 +157,19 @@ function SingleUser() {
                   name="control-hooks"
                   preserve={false}
                 >
-                  <Checkbox
-                    style={{ marginBottom: 20 }}
-                    onChange={toggleDisable}
-                  >
-                    Abilita modifica
-                  </Checkbox>
                   <Form.Item
                     name="createdAt"
                     label="Data Creazione"
                     rules={[{ required: true }]}
                   >
-                    <Input defaultValue={createdAt} disabled={disabled} />
+                    <Input defaultValue={createdAt} />
                   </Form.Item>
                   <Form.Item
                     name="name"
                     label="Nome"
                     rules={[{ required: true }]}
                   >
-                    <Input defaultValue={name} disabled={disabled} />
+                    <Input defaultValue={name} />
                   </Form.Item>
                   <Form.Item
                     name="upload"
@@ -197,7 +180,6 @@ function SingleUser() {
                     <Upload
                       multiple={false}
                       maxCount={1}
-                      disabled={disabled}
                       name="logo"
                       listType="picture"
                       beforeUpload={(file) => {
@@ -217,7 +199,7 @@ function SingleUser() {
                     label="Data di Nascita"
                     rules={[{ required: true }]}
                   >
-                    <Input defaultValue={birthdate} disabled={disabled} />
+                    <Input defaultValue={birthdate} />
                   </Form.Item>
                   <Form.Item
                     name="articlesIds"
@@ -225,7 +207,6 @@ function SingleUser() {
                     rules={[{ required: true }]}
                   >
                     <Select
-                      disabled={disabled}
                       mode="multiple"
                       allowClear
                       style={{ width: "100%" }}
@@ -239,7 +220,6 @@ function SingleUser() {
                 <Button
                   style={{ margin: 10 }}
                   onClick={() => handleUpdateArticlesClick(detailId)}
-                  disabled={disabled}
                   type="primary"
                 >
                   Salva modifiche
@@ -250,18 +230,15 @@ function SingleUser() {
             name="control-hooks"
             preserve={false}
           >
-            <Checkbox style={{ marginBottom: 20 }} onChange={toggleDisable}>
-              Abilita modifica
-            </Checkbox>
             <Form.Item
               name="createdAt"
               label="Data Creazione"
               rules={[{ required: true }]}
             >
-              <Input defaultValue={createdAt} disabled={disabled} />
+              <Input defaultValue={createdAt} />
             </Form.Item>
             <Form.Item name="name" label="Nome" rules={[{ required: true }]}>
-              <Input defaultValue={name} disabled={disabled} />
+              <Input defaultValue={name} />
             </Form.Item>
             <Form.Item
               name="upload"
@@ -272,7 +249,6 @@ function SingleUser() {
               <Upload
                 multiple={false}
                 maxCount={1}
-                disabled={disabled}
                 name="logo"
                 listType="picture"
                 beforeUpload={(file) => {
@@ -292,7 +268,7 @@ function SingleUser() {
               label="Data di Nascita"
               rules={[{ required: true }]}
             >
-              <Input defaultValue={birthdate} disabled={disabled} />
+              <Input defaultValue={birthdate} />
             </Form.Item>
             <Form.Item
               name="articlesIds"
@@ -300,7 +276,6 @@ function SingleUser() {
               rules={[{ required: true }]}
             >
               <Select
-                disabled={disabled}
                 mode="multiple"
                 allowClear
                 style={{ width: "100%" }}
@@ -314,7 +289,6 @@ function SingleUser() {
           <Button
             style={{ margin: 10 }}
             onClick={() => handleUpdateArticlesClick(detailId)}
-            disabled={disabled}
             type="primary"
           >
             Salva modifiche

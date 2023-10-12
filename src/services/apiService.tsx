@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import axios from "axios";
 import { UserType } from "../utils/user-type";
 import { ArticleType } from "../utils/article-type";
@@ -14,16 +15,11 @@ interface UpdateUserRequest {
   user: UserType;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function promiseCall(apiPromise: Promise<any>): Promise<any> {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     (async () => {
-      try {
-        const results = await apiPromise;
-        return resolve(results.data);
-      } catch (err) {
-        return reject(err);
-      }
+      const results = await apiPromise;
+      return resolve(results.data);
     })();
   });
 }

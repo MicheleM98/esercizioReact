@@ -1,15 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useQuery, useMutation } from "@tanstack/react-query";
-import {
-  Button,
-  Card,
-  Modal,
-  Col,
-  Row,
-  Form,
-  Input,
-  Checkbox,
-  Upload,
-} from "antd";
+import { Button, Card, Modal, Col, Row, Form, Input, Upload } from "antd";
 import {
   EditOutlined,
   DeleteOutlined,
@@ -21,6 +12,7 @@ import Api from "../services/apiService";
 import { useState } from "react";
 import LinkMod from "../components/link";
 import { ArticleType } from "../utils/article-type";
+import ArticleModal from "../components/article-modal";
 
 const { Meta } = Card;
 const { TextArea } = Input;
@@ -37,7 +29,6 @@ export function Articles() {
   const showCreateModal = () => {
     setIsCreateModalOpen(true);
   };
-
   const handleCreateCancel = () => {
     setIsCreateModalOpen(false);
   };
@@ -64,12 +55,6 @@ export function Articles() {
 
   const handleDetailsCancel = () => {
     setIsDetailsModalOpen(false);
-  };
-
-  const [disabled, setDisabled] = useState(true);
-
-  const toggleDisable = () => {
-    setDisabled(!disabled);
   };
 
   const { data, refetch } = useQuery<ArticleType[]>(
@@ -100,34 +85,28 @@ export function Articles() {
 
   const handleCreateArticlesClick = async () => {
     form.validateFields();
-    setTimeout(async () => {
-      const fieldErrors = form.getFieldsError([
-        "createdAt",
-        "name",
-        "picture",
-        "sellerId",
-        "description",
-        "buyUrl",
-      ]);
-      const isInvalid = fieldErrors.some((fe) => fe.errors.length > 0);
-      if (!isInvalid) {
-        const newArticle = {
-          createdAt: form.getFieldValue("createdAt"),
-          name: form.getFieldValue("name"),
-          picture: form.getFieldValue("picture"),
-          sellerId: form.getFieldValue("sellerId"),
-          description: form.getFieldValue("description"),
-          buyUrl: form.getFieldValue("buyUrl"),
-          id: String(Math.random()),
-        };
-        try {
-          await createArticle(newArticle);
-          handleCreateCancel();
-        } catch (error) {
-          console.error("Errore durante la creazione dell'articolo:", error);
-        }
-      }
-    });
+    const fieldErrors = form.getFieldsError([
+      "createdAt",
+      "name",
+      "picture",
+      "sellerId",
+      "description",
+      "buyUrl",
+    ]);
+    const isInvalid = fieldErrors.some((fe) => fe.errors.length > 0);
+    if (!isInvalid) {
+      const newArticle = {
+        createdAt: form.getFieldValue("createdAt"),
+        name: form.getFieldValue("name"),
+        picture: form.getFieldValue("picture"),
+        sellerId: form.getFieldValue("sellerId"),
+        description: form.getFieldValue("description"),
+        buyUrl: form.getFieldValue("buyUrl"),
+        id: String(Math.random()),
+      };
+      await createArticle(newArticle);
+      handleCreateCancel();
+    }
   };
 
   const handleUpdateArticlesClick = async (articleId: string) => {
@@ -140,28 +119,15 @@ export function Articles() {
       buyUrl: form.getFieldValue("buyUrl"),
       id: articleId,
     };
-    try {
-      const modifiedArticle = await updateArticle({
-        id: articleId,
-        article: updatedArticle,
-      });
-      console.log("Articolo modificate:", modifiedArticle);
-      handleDetailsCancel();
-    } catch (error) {
-      console.error("Errore durante la modifica dell'articolo:", error);
-    }
+    await updateArticle({
+      id: articleId,
+      article: updatedArticle,
+    });
+    handleDetailsCancel();
   };
 
   const handleDeleteArticleClick = async (articleId: string) => {
-    try {
-      await deleteArticle(articleId);
-      console.log(`Articolo con ID ${articleId} eliminato con successo.`);
-    } catch (error) {
-      console.error(
-        `Errore durante l'eliminazione dell'articolo con ID ${articleId}:`,
-        error
-      );
-    }
+    await deleteArticle(articleId);
   };
 
   const normFile = (e: any) => {
@@ -212,92 +178,23 @@ export function Articles() {
           </Col>
         ))}
       </Row>
-      <Modal
-        open={isCreateModalOpen}
-        onOk={() => handleCreateArticlesClick()}
-        onCancel={handleCreateCancel}
-        destroyOnClose={true}
-      >
-        <Form
-          {...layout}
-          form={form}
-          name="control-hooks"
-          style={{ maxWidth: 600 }}
-          preserve={false}
-        >
-          <Form.Item
-            name="createdAt"
-            label="Data Creazione"
-            rules={[{ required: true }]}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item name="name" label="Nome" rules={[{ required: true }]}>
-            <Input />
-          </Form.Item>
-          <Form.Item
-            name="upload"
-            label="Upload"
-            valuePropName="fileList"
-            getValueFromEvent={normFile}
-          >
-            <Upload
-              multiple={false}
-              maxCount={1}
-              name="logo"
-              listType="picture"
-              beforeUpload={(file) => {
-                const reader = new FileReader();
-                reader.readAsDataURL(file);
-                reader.onload = () => {
-                  form.setFieldValue("picture", reader.result);
-                };
-                return false;
-              }}
-            >
-              <Button icon={<UploadOutlined />}> Upload </Button>
-            </Upload>
-          </Form.Item>
-          <Form.Item
-            name="sellerId"
-            label="Venditore"
-            rules={[{ required: true }]}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            name="description"
-            label="Descrizione"
-            rules={[{ required: true }]}
-          >
-            <TextArea rows={15} />
-          </Form.Item>
-          <Form.Item name="buyUrl" label="Url" rules={[{ required: true }]}>
-            <Input />
-          </Form.Item>
-        </Form>
-      </Modal>
-
+      <ArticleModal open={isCreateModalOpen} close={handleCreateCancel} />
       <Modal
         open={isDetailsModalOpen}
         destroyOnClose={true}
         footer={null}
         onCancel={handleDetailsCancel}
-        afterClose={toggleDisable}
       >
         <Form {...layout} form={form} name="control-hooks">
-          <Checkbox style={{ marginBottom: 20 }} onChange={toggleDisable}>
-            Abilita modifica
-          </Checkbox>
           <Form.Item
             name="createdAt"
             label="Data Creazione"
             rules={[{ required: true }]}
           >
-            <Input defaultValue={createdAt} disabled={disabled} />
+            <Input defaultValue={createdAt} />
           </Form.Item>
           <Form.Item name="name" label="Nome" rules={[{ required: true }]}>
-            <Input defaultValue={name} disabled={disabled} />
+            <Input defaultValue={name} />
           </Form.Item>
           <Form.Item
             name="upload"
@@ -308,7 +205,6 @@ export function Articles() {
             <Upload
               multiple={false}
               maxCount={1}
-              disabled={disabled}
               name="logo"
               listType="picture"
               beforeUpload={(file) => {
@@ -328,27 +224,22 @@ export function Articles() {
             label="Venditore"
             rules={[{ required: true }]}
           >
-            <Input defaultValue={sellerId} disabled={disabled} />
+            <Input defaultValue={sellerId} />
           </Form.Item>
           <Form.Item
             name="description"
             label="Descrizione"
             rules={[{ required: true }]}
           >
-            <TextArea
-              rows={15}
-              defaultValue={description}
-              disabled={disabled}
-            />
+            <TextArea rows={15} defaultValue={description} />
           </Form.Item>
           <Form.Item name="buyUrl" label="Url" rules={[{ required: true }]}>
-            <Input defaultValue={buyUrl} disabled={disabled} />
+            <Input defaultValue={buyUrl} />
           </Form.Item>
         </Form>
         <Button
           style={{ margin: 10 }}
           onClick={() => handleUpdateArticlesClick(detailId)}
-          disabled={disabled}
           type="primary"
         >
           Salva modifiche
