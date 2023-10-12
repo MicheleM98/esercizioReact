@@ -1,34 +1,17 @@
 import axios from "axios";
+import { UserType } from "../utils/user-type";
+import { ArticleType } from "../utils/article-type";
 
 const baseUrl = "https://62c96230d9ead251e8baf02e.mockapi.io/campus";
 
-interface User {
-  createdAt: string;
-  name: string;
-  avatar: string;
-  birthdate: string;
-  articlesIds: Array<number>;
-  id: string;
-}
-
-interface Article {
-  createdAt: string;
-  name: string;
-  picture: string;
-  sellerId: string | number;
-  description: string;
-  buyUrl: string;
-  id: string;
-}
-
 interface UpdateArticleRequest {
   id: string;
-  article: Article;
+  article: ArticleType;
 }
 
 interface UpdateUserRequest {
   id: string;
-  user: User;
+  user: UserType;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -45,19 +28,19 @@ function promiseCall(apiPromise: Promise<any>): Promise<any> {
   });
 }
 class ApiService {
-  getUsers(): Promise<User[]> {
+  getUsers(): Promise<UserType[]> {
     return promiseCall(axios.get(`${baseUrl}/users`));
   }
 
-  createUser(user: User): Promise<User> {
+  createUser(user: UserType): Promise<UserType> {
     return promiseCall(axios.post(`${baseUrl}/users`, user));
   }
 
-  getUserById(id: string): Promise<User> {
+  getUserById(id: string): Promise<UserType> {
     return promiseCall(axios.get(`${baseUrl}/users/${id}`));
   }
 
-  updateUser(updateUserRequest: UpdateUserRequest): Promise<User> {
+  updateUser(updateUserRequest: UpdateUserRequest): Promise<UserType> {
     return promiseCall(
       axios.put(
         `${baseUrl}/users/${updateUserRequest.id}`,
@@ -70,19 +53,21 @@ class ApiService {
     return promiseCall(axios.delete(`${baseUrl}/users/${id}`));
   }
 
-  getArticles(): Promise<Article[]> {
+  getArticles(): Promise<ArticleType[]> {
     return promiseCall(axios.get(`${baseUrl}/articles`));
   }
 
-  createArticle(article: Article): Promise<Article> {
+  createArticle(article: ArticleType): Promise<ArticleType> {
     return promiseCall(axios.post(`${baseUrl}/articles`, article));
   }
 
-  getArticleById(id: string): Promise<Article> {
+  getArticleById(id: string): Promise<ArticleType> {
     return promiseCall(axios.get(`${baseUrl}/articles/${id}`));
   }
 
-  updateArticle(updateArticleRequest: UpdateArticleRequest): Promise<Article> {
+  updateArticle(
+    updateArticleRequest: UpdateArticleRequest
+  ): Promise<ArticleType> {
     return promiseCall(
       axios.put(
         `${baseUrl}/articles/${updateArticleRequest.id}`,

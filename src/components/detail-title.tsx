@@ -2,7 +2,7 @@ import { Typography } from "antd";
 
 const { Title } = Typography;
 
-const TitleMod: React.FC<{
+const DetailTitle: React.FC<{
   level: 5 | 1 | 2 | 3 | 4 | undefined;
   title: string;
 }> = ({ level, title }) => {
@@ -13,4 +13,4 @@ const TitleMod: React.FC<{
   );
 };
 
-export default TitleMod;
+export default DetailTitle;

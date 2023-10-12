@@ -21,22 +21,13 @@ import CardCover from "../components/card-cover";
 import Api from "../services/apiService";
 import { useState } from "react";
 import LinkMod from "../components/link";
+import { ArticleType } from "../utils/article-type";
 
 const { Meta } = Card;
 
 const layout = {
   labelCol: { span: 6 },
   wrapperCol: { span: 17 },
-};
-
-type Article = {
-  createdAt: string;
-  name: string;
-  picture: string;
-  sellerId: string | number;
-  description: string;
-  buyUrl: string;
-  id: string;
 };
 
 export function Articles() {
@@ -59,7 +50,7 @@ export function Articles() {
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
   const [detailId, setDetailId] = useState("");
 
-  const showDetailsModal = (article: Article) => {
+  const showDetailsModal = (article: ArticleType) => {
     setIsDetailsModalOpen(true);
     const createdAtDate = new Date(article.createdAt);
     setCreatedAt(createdAtDate.toDateString());
@@ -82,9 +73,13 @@ export function Articles() {
     setDisabled(!disabled);
   };
 
-  const { data, refetch } = useQuery<Article[]>(["article"], Api.getArticles, {
-    keepPreviousData: true,
-  });
+  const { data, refetch } = useQuery<ArticleType[]>(
+    ["article"],
+    Api.getArticles,
+    {
+      keepPreviousData: true,
+    }
+  );
 
   const { mutateAsync: createArticle } = useMutation(Api.createArticle, {
     onSuccess: () => {

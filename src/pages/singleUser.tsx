@@ -20,7 +20,7 @@ import {
 } from "antd";
 import { useState } from "react";
 import { UploadOutlined } from "@ant-design/icons";
-import TitleMod from "../components/title";
+import DetailTitle from "../components/detail-title";
 
 type User = {
   createdAt: string;
@@ -125,16 +125,16 @@ function singleUser() {
         </Col>
         <Col span={1}></Col>
         <Col span={14}>
-          <TitleMod level={2} title="Data di creazione:" />
+          <DetailTitle level={2} title="Data di creazione:" />
           <Title level={4}>{String(creationDate)}</Title>
           <Divider />
-          <TitleMod level={2} title="Nome:" />
+          <DetailTitle level={2} title="Nome:" />
           <Title level={4}>{user?.name}</Title>
           <Divider />
-          <TitleMod level={2} title="Data di nascita:" />
+          <DetailTitle level={2} title="Data di nascita:" />
           <Title level={4}>{user?.birthdate}</Title>
           <Divider />
-          <TitleMod level={2} title="Articoli in vendita:" />
+          <DetailTitle level={2} title="Articoli in vendita:" />
           <Title level={4}>{user?.articlesIds}</Title>
           <Divider />
           <Link to="/users">

@@ -22,6 +22,7 @@ import CardCover from "../components/card-cover";
 import Api from "../services/apiService";
 import { useState } from "react";
 import LinkMod from "../components/link";
+import { UserType } from "../utils/user-type";
 
 import type { SelectProps } from "antd";
 
@@ -32,15 +33,6 @@ const { Meta } = Card;
 const layout = {
   labelCol: { span: 6 },
   wrapperCol: { span: 17 },
-};
-
-type User = {
-  createdAt: string;
-  name: string;
-  avatar: string;
-  birthdate: string;
-  articlesIds: Array<number>;
-  id: string;
 };
 
 export function Users() {
@@ -61,7 +53,7 @@ export function Users() {
   const [birthdate, setBirtdate] = useState("");
   const [articlesIds, setArticlesIds] = useState("");
 
-  const showDetailsModal = (user: User) => {
+  const showDetailsModal = (user: UserType) => {
     setIsDetailsModalOpen(true);
     const createdAtDate = new Date(user.createdAt);
     setCreatedAt(createdAtDate.toDateString());
@@ -82,7 +74,7 @@ export function Users() {
     setDisabled(!disabled);
   };
 
-  const { data, refetch } = useQuery<User[]>(["users"], Api.getUsers, {
+  const { data, refetch } = useQuery<UserType[]>(["users"], Api.getUsers, {
     keepPreviousData: true,
   });
 

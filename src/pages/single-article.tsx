@@ -18,17 +18,8 @@ import {
 } from "antd";
 import { useState } from "react";
 import { UploadOutlined } from "@ant-design/icons";
-import TitleMod from "../components/title";
-
-type Article = {
-  createdAt: string;
-  name: string;
-  picture: string;
-  sellerId: string | number;
-  description: string;
-  buyUrl: string;
-  id: string;
-};
+import DetailTitle from "../components/detail-title";
+import { ArticleType } from "../utils/article-type";
 
 function SingleArticle() {
   const { id } = useParams();
@@ -51,7 +42,7 @@ function SingleArticle() {
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
   const [detailId, setDetailId] = useState("");
 
-  const showDetailsModal = (article: Article) => {
+  const showDetailsModal = (article: ArticleType) => {
     setIsDetailsModalOpen(true);
     const createdAtDate = new Date(article.createdAt);
     setCreatedAt(createdAtDate.toDateString());
@@ -126,19 +117,19 @@ function SingleArticle() {
         </Col>
         <Col span={1}></Col>
         <Col span={14}>
-          <TitleMod level={2} title="Data di creazione:" />
+          <DetailTitle level={2} title="Data di creazione:" />
           <Title level={4}>{String(creationDate)}</Title>
           <Divider />
-          <TitleMod level={2} title="Titolo:" />
+          <DetailTitle level={2} title="Titolo:" />
           <Title level={4}>{article?.name}</Title>
           <Divider />
-          <TitleMod level={2} title="Descrizione:" />
+          <DetailTitle level={2} title="Descrizione:" />
           <Title level={4}>{article?.description}</Title>
           <Divider />
-          <TitleMod level={2} title="Venditore:" />
+          <DetailTitle level={2} title="Venditore:" />
           <Title level={4}>{article?.sellerId}</Title>
           <Divider />
-          <TitleMod level={2} title="Url:" />
+          <DetailTitle level={2} title="Url:" />
           <Title level={4}>{article?.buyUrl}</Title>
           <Divider />
           <Link to="/articles">
