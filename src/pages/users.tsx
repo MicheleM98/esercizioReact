@@ -18,10 +18,10 @@ import {
   PlusCircleOutlined,
   UploadOutlined,
 } from "@ant-design/icons";
-import CardCover from "./components/cardCover";
-import Api from "./apiService";
+import CardCover from "../components/card-cover";
+import Api from "../services/apiService";
 import { useState } from "react";
-import LinkMod from "./components/link";
+import LinkMod from "../components/link";
 
 import type { SelectProps } from "antd";
 
@@ -207,7 +207,7 @@ export function Users() {
               ]}
             >
               <Meta
-                title={<LinkMod id={user.id} title={user.name} />}
+                title={<LinkMod page="user" id={user.id} title={user.name} />}
                 description={user.birthdate}
               />
             </Card>

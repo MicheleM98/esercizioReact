@@ -1,9 +1,9 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { Users } from "./users";
-import { Articles } from "./articles";
+import { Users } from "./pages/users";
+import { Articles } from "./pages/articles";
 import Navbar from "./components/navbar";
-import singleArticle from "./singleArticle";
-import singleUser from "./singleUser";
+import SingleArticle from "./pages/single-article";
+import SingleUser from "./pages/singleUser";
 
 function App() {
   return (
@@ -13,8 +13,8 @@ function App() {
         <Routes>
           <Route path="/users" Component={() => <Users />} />
           <Route path="/articles" Component={() => <Articles />} />
-          <Route path="/article/:id" Component={singleArticle} />
-          <Route path="/user/:id" Component={singleUser} />
+          <Route path="/article/:id" Component={() => <SingleArticle />} />
+          <Route path="/user/:id" Component={() => <SingleUser />} />
         </Routes>
       </BrowserRouter>
     </div>

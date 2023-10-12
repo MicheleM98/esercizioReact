@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-hooks/rules-of-hooks */
 import { Link, useParams } from "react-router-dom";
-import Api from "./apiService";
+import Api from "../services/apiService";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import {
   Typography,
@@ -20,7 +20,7 @@ import {
 } from "antd";
 import { useState } from "react";
 import { UploadOutlined } from "@ant-design/icons";
-import TitleMod from "./components/title";
+import TitleMod from "../components/title";
 
 type User = {
   createdAt: string;

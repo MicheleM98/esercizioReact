@@ -17,10 +17,10 @@ import {
   PlusCircleOutlined,
   UploadOutlined,
 } from "@ant-design/icons";
-import CardCover from "./components/cardCover";
-import Api from "./apiService";
+import CardCover from "../components/card-cover";
+import Api from "../services/apiService";
 import { useState } from "react";
-import LinkMod from "./components/link";
+import LinkMod from "../components/link";
 
 const { Meta } = Card;
 
@@ -206,7 +206,13 @@ export function Articles() {
               ]}
             >
               <Meta
-                title={<LinkMod id={article.id} title={article.name} />}
+                title={
+                  <LinkMod
+                    page="article"
+                    id={article.id}
+                    title={article.name}
+                  />
+                }
                 description={article.buyUrl}
               />
             </Card>
