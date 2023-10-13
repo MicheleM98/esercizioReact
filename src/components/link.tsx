@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-const LinkMod: React.FC<{ page: string; id: string; title: string }> = ({
+const LinkTitle: React.FC<{ page: string; id: string; title: string }> = ({
   page,
   id,
   title,
@@ -12,4 +12,4 @@ const LinkMod: React.FC<{ page: string; id: string; title: string }> = ({
   );
 };
 
-export default LinkMod;
+export default LinkTitle;

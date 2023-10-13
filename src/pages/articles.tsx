@@ -9,7 +9,7 @@ import {
 import CardCover from "../components/card-cover";
 import Api from "../services/api-service";
 import { useState } from "react";
-import LinkMod from "../components/link";
+import LinkTitle from "../components/link";
 import { ArticleType } from "../utils/article-type";
 import ArticleModal from "../components/article-modal";
 
@@ -96,7 +96,7 @@ export function Articles() {
             >
               <Meta
                 title={
-                  <LinkMod
+                  <LinkTitle
                     page="article"
                     id={article.id}
                     title={article.name}

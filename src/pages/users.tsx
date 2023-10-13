@@ -9,7 +9,7 @@ import {
 import CardCover from "../components/card-cover";
 import Api from "../services/api-service";
 import { useState } from "react";
-import LinkMod from "../components/link";
+import LinkTitle from "../components/link";
 import { UserType } from "../utils/user-type";
 import UserModal from "../components/user-modal";
 
@@ -89,7 +89,7 @@ export function Users() {
               ]}
             >
               <Meta
-                title={<LinkMod page="user" id={user.id} title={user.name} />}
+                title={<LinkTitle page="user" id={user.id} title={user.name} />}
                 description={user.birthdate}
               />
             </Card>
