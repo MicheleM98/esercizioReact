@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Link, useParams } from "react-router-dom";
-import Api from "../services/apiService";
+import Api from "../services/api-service";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import {
   Typography,

@@ -3,7 +3,7 @@ import { Button, Form, Input, Modal, Select, SelectProps, Upload } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { UserType } from "../utils/user-type";
-import Api from "../services/apiService";
+import Api from "../services/api-service";
 
 const options: SelectProps["options"] = [];
 

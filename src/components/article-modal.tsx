@@ -3,7 +3,7 @@ import { Button, Form, Input, Modal, Upload } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { ArticleType } from "../utils/article-type";
-import Api from "../services/apiService";
+import Api from "../services/api-service";
 
 const { TextArea } = Input;
 

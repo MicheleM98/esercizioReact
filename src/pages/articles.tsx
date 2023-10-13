@@ -7,7 +7,7 @@ import {
   PlusCircleOutlined,
 } from "@ant-design/icons";
 import CardCover from "../components/card-cover";
-import Api from "../services/apiService";
+import Api from "../services/api-service";
 import { useState } from "react";
 import LinkMod from "../components/link";
 import { ArticleType } from "../utils/article-type";
