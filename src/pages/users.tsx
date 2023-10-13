@@ -1,38 +1,19 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useQuery, useMutation } from "@tanstack/react-query";
-import {
-  Button,
-  Card,
-  Modal,
-  Col,
-  Row,
-  Form,
-  Input,
-  Select,
-  Upload,
-} from "antd";
+import { Button, Card, Col, Row } from "antd";
 import {
   EditOutlined,
   DeleteOutlined,
   PlusCircleOutlined,
-  UploadOutlined,
 } from "@ant-design/icons";
 import CardCover from "../components/card-cover";
 import Api from "../services/apiService";
 import { useState } from "react";
 import LinkMod from "../components/link";
 import { UserType } from "../utils/user-type";
-
-import type { SelectProps } from "antd";
-
-const options: SelectProps["options"] = [];
+import UserModal from "../components/user-modal";
 
 const { Meta } = Card;
-
-const layout = {
-  labelCol: { span: 6 },
-  wrapperCol: { span: 17 },
-};
 
 export function Users() {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
@@ -41,7 +22,7 @@ export function Users() {
     setIsCreateModalOpen(true);
   };
 
-  const handleCreateCancel = () => {
+  const handleCloseCreateModal = () => {
     setIsCreateModalOpen(false);
   };
 
@@ -50,7 +31,7 @@ export function Users() {
   const [createdAt, setCreatedAt] = useState("");
   const [name, setName] = useState("");
   const [birthdate, setBirtdate] = useState("");
-  const [articlesIds, setArticlesIds] = useState("");
+  const [articlesIds, setArticlesIds] = useState([]);
 
   const showDetailsModal = (user: UserType) => {
     setIsDetailsModalOpen(true);
@@ -62,26 +43,12 @@ export function Users() {
     setDetailId(user.id);
   };
 
-  const handleDetailsCancel = () => {
+  const handleCloseDetailModal = () => {
     setIsDetailsModalOpen(false);
   };
 
-  const [form] = Form.useForm();
-
   const { data, refetch } = useQuery<UserType[]>(["users"], Api.getUsers, {
     keepPreviousData: true,
-  });
-
-  const { mutateAsync: createUser } = useMutation(Api.createUser, {
-    onSuccess: () => {
-      refetch();
-    },
-  });
-
-  const { mutateAsync: updateUser } = useMutation(Api.updateUser, {
-    onSuccess: () => {
-      refetch();
-    },
   });
 
   const { mutateAsync: deleteUser } = useMutation(Api.deleteUser, {
@@ -90,60 +57,8 @@ export function Users() {
     },
   });
 
-  const handleCreateUserClick = async () => {
-    form.validateFields();
-    setTimeout(async () => {
-      const fieldErrors = form.getFieldsError([
-        "createdAt",
-        "name",
-        "avatar",
-        "birthdate",
-        "articlesIds",
-      ]);
-      const isInvalid = fieldErrors.some((fe) => fe.errors.length > 0);
-      if (!isInvalid) {
-        const newUser = {
-          createdAt: form.getFieldValue("createdAt"),
-          name: form.getFieldValue("name"),
-          avatar: form.getFieldValue("avatar"),
-          birthdate: form.getFieldValue("birthdate"),
-          articlesIds: form.getFieldValue("articlesIds"),
-          id: String(Math.random()),
-        };
-        await createUser(newUser);
-        handleCreateCancel();
-      }
-    });
-  };
-
-  const handleUpdateArticlesClick = async (userId: string) => {
-    const updatedUser = {
-      createdAt: form.getFieldValue("createdAt"),
-      name: form.getFieldValue("name"),
-      avatar: form.getFieldValue("avatar"),
-      birthdate: form.getFieldValue("birthdate"),
-      articlesIds: form.getFieldValue("articlesIds"),
-      id: userId,
-    };
-    await updateUser({ id: userId, user: updatedUser });
-    handleDetailsCancel();
-  };
-
   const handleDeleteUserClick = async (userId: string) => {
     await deleteUser(userId);
-  };
-
-  const handleSelectSearch = (text: string) => {
-    if (options) {
-      options[0] = { label: text, value: text };
-    }
-  };
-
-  const normFile = (e: any) => {
-    if (Array.isArray(e)) {
-      return e;
-    }
-    return e?.fileList || [];
   };
 
   return (
@@ -181,147 +96,26 @@ export function Users() {
           </Col>
         ))}
       </Row>
-      <Modal
+      <UserModal
         open={isCreateModalOpen}
-        onOk={() => handleCreateUserClick()}
-        onCancel={handleCreateCancel}
-        destroyOnClose={true}
-      >
-        <Form
-          {...layout}
-          form={form}
-          name="control-hooks"
-          style={{ maxWidth: 600 }}
-          preserve={false}
-        >
-          <Form.Item
-            name="createdAt"
-            label="Data Creazione"
-            rules={[{ required: true }]}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item name="name" label="Nome" rules={[{ required: true }]}>
-            <Input />
-          </Form.Item>
-          <Form.Item
-            name="upload"
-            label="Upload"
-            valuePropName="fileList"
-            getValueFromEvent={normFile}
-          >
-            <Upload
-              multiple={false}
-              maxCount={1}
-              name="logo"
-              listType="picture"
-              beforeUpload={(file) => {
-                const reader = new FileReader();
-                reader.readAsDataURL(file);
-                reader.onload = () => {
-                  form.setFieldValue("avatar", reader.result);
-                };
-                return false;
-              }}
-            >
-              <Button icon={<UploadOutlined />}> Upload </Button>
-            </Upload>
-          </Form.Item>
-          <Form.Item
-            name="birthDate"
-            label="Data di Nascita"
-            rules={[{ required: true }]}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            name="articlesIds"
-            label="Articoli in vendita"
-            rules={[{ required: true }]}
-          >
-            <Select
-              mode="multiple"
-              allowClear
-              style={{ width: "100%" }}
-              placeholder="Please select"
-              options={options}
-              onSearch={handleSelectSearch}
-            />
-          </Form.Item>
-        </Form>
-      </Modal>
-
-      <Modal
+        onClose={handleCloseCreateModal}
+        method="create"
+        id=""
+        createdAt=""
+        name=""
+        birthdate=""
+        articlesIds={[]}
+      />
+      <UserModal
         open={isDetailsModalOpen}
-        onCancel={handleDetailsCancel}
-        destroyOnClose={true}
-        footer={null}
-      >
-        <Form {...layout} form={form} name="control-hooks" preserve={false}>
-          <Form.Item
-            name="createdAt"
-            label="Data Creazione"
-            rules={[{ required: true }]}
-          >
-            <Input defaultValue={createdAt} />
-          </Form.Item>
-          <Form.Item name="name" label="Nome" rules={[{ required: true }]}>
-            <Input defaultValue={name} />
-          </Form.Item>
-          <Form.Item
-            name="upload"
-            label="Upload"
-            valuePropName="fileList"
-            getValueFromEvent={normFile}
-          >
-            <Upload
-              multiple={false}
-              maxCount={1}
-              name="logo"
-              listType="picture"
-              beforeUpload={(file) => {
-                const reader = new FileReader();
-                reader.readAsDataURL(file);
-                reader.onload = () => {
-                  form.setFieldValue("avatar", reader.result);
-                };
-                return false;
-              }}
-            >
-              <Button icon={<UploadOutlined />}> Upload </Button>
-            </Upload>
-          </Form.Item>
-          <Form.Item
-            name="birthDate"
-            label="Data di Nascita"
-            rules={[{ required: true }]}
-          >
-            <Input defaultValue={birthdate} />
-          </Form.Item>
-          <Form.Item
-            name="articlesIds"
-            label="Articoli in vendita"
-            rules={[{ required: true }]}
-          >
-            <Select
-              mode="multiple"
-              allowClear
-              style={{ width: "100%" }}
-              placeholder="Please select"
-              options={options}
-              onSearch={handleSelectSearch}
-              defaultValue={articlesIds}
-            />
-          </Form.Item>
-        </Form>
-        <Button
-          style={{ margin: 10 }}
-          onClick={() => handleUpdateArticlesClick(detailId)}
-          type="primary"
-        >
-          Salva modifiche
-        </Button>
-      </Modal>
+        onClose={handleCloseDetailModal}
+        method="update"
+        id={detailId}
+        createdAt={createdAt}
+        name={name}
+        birthdate={birthdate}
+        articlesIds={articlesIds}
+      />
     </>
   );
 }

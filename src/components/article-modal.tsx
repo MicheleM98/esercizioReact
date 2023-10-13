@@ -12,7 +12,7 @@ const layout = {
   wrapperCol: { span: 17 },
 };
 
-const normFile = (e: any) => {
+const picture = (e: any) => {
   if (Array.isArray(e)) {
     return e;
   }
@@ -106,7 +106,6 @@ const ArticleModal: React.FC<{
   const handleMethod = () => {
     if (method === "create") {
       handleCreateArticlesClick();
-      console.log(method);
     } else if (method === "update") {
       handleUpdateArticlesClick(id);
     }
@@ -141,7 +140,7 @@ const ArticleModal: React.FC<{
           name="upload"
           label="Upload"
           valuePropName="fileList"
-          getValueFromEvent={normFile}
+          getValueFromEvent={picture}
         >
           <Upload
             multiple={false}
