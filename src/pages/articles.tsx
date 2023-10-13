@@ -1,11 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { Button, Card, Modal, Col, Row, Form, Input, Upload } from "antd";
+import { Button, Card, Col, Row } from "antd";
 import {
   EditOutlined,
   DeleteOutlined,
   PlusCircleOutlined,
-  UploadOutlined,
 } from "@ant-design/icons";
 import CardCover from "../components/card-cover";
 import Api from "../services/apiService";
@@ -15,22 +14,11 @@ import { ArticleType } from "../utils/article-type";
 import ArticleModal from "../components/article-modal";
 
 const { Meta } = Card;
-const { TextArea } = Input;
-
-const layout = {
-  labelCol: { span: 6 },
-  wrapperCol: { span: 17 },
-};
 
 export function Articles() {
-  const [form] = Form.useForm();
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-
   const showCreateModal = () => {
     setIsCreateModalOpen(true);
-  };
-  const handleCreateCancel = () => {
-    setIsCreateModalOpen(false);
   };
 
   const [createdAt, setCreatedAt] = useState("");
@@ -53,7 +41,11 @@ export function Articles() {
     setDetailId(article.id);
   };
 
-  const handleDetailsCancel = () => {
+  const handleCloseCreateModal = () => {
+    setIsCreateModalOpen(false);
+  };
+
+  const handleCloseDetailModal = () => {
     setIsDetailsModalOpen(false);
   };
 
@@ -65,76 +57,14 @@ export function Articles() {
     }
   );
 
-  const { mutateAsync: createArticle } = useMutation(Api.createArticle, {
-    onSuccess: () => {
-      refetch();
-    },
-  });
-
-  const { mutateAsync: updateArticle } = useMutation(Api.updateArticle, {
-    onSuccess: () => {
-      refetch();
-    },
-  });
-
   const { mutateAsync: deleteArticle } = useMutation(Api.deleteArticle, {
     onSuccess: () => {
       refetch();
     },
   });
 
-  const handleCreateArticlesClick = async () => {
-    form.validateFields();
-    const fieldErrors = form.getFieldsError([
-      "createdAt",
-      "name",
-      "picture",
-      "sellerId",
-      "description",
-      "buyUrl",
-    ]);
-    const isInvalid = fieldErrors.some((fe) => fe.errors.length > 0);
-    if (!isInvalid) {
-      const newArticle = {
-        createdAt: form.getFieldValue("createdAt"),
-        name: form.getFieldValue("name"),
-        picture: form.getFieldValue("picture"),
-        sellerId: form.getFieldValue("sellerId"),
-        description: form.getFieldValue("description"),
-        buyUrl: form.getFieldValue("buyUrl"),
-        id: String(Math.random()),
-      };
-      await createArticle(newArticle);
-      handleCreateCancel();
-    }
-  };
-
-  const handleUpdateArticlesClick = async (articleId: string) => {
-    const updatedArticle = {
-      createdAt: form.getFieldValue("createdAt"),
-      name: form.getFieldValue("name"),
-      picture: form.getFieldValue("picture"),
-      sellerId: form.getFieldValue("sellerId"),
-      description: form.getFieldValue("description"),
-      buyUrl: form.getFieldValue("buyUrl"),
-      id: articleId,
-    };
-    await updateArticle({
-      id: articleId,
-      article: updatedArticle,
-    });
-    handleDetailsCancel();
-  };
-
   const handleDeleteArticleClick = async (articleId: string) => {
     await deleteArticle(articleId);
-  };
-
-  const normFile = (e: any) => {
-    if (Array.isArray(e)) {
-      return e;
-    }
-    return e?.fileList;
   };
 
   return (
@@ -178,73 +108,28 @@ export function Articles() {
           </Col>
         ))}
       </Row>
-      <ArticleModal open={isCreateModalOpen} close={handleCreateCancel} />
-      <Modal
+      <ArticleModal
+        open={isCreateModalOpen}
+        onClose={handleCloseCreateModal}
+        method="create"
+        id=""
+        createdAt=""
+        name=""
+        sellerId=""
+        description=""
+        buyUrl=""
+      />
+      <ArticleModal
         open={isDetailsModalOpen}
-        destroyOnClose={true}
-        footer={null}
-        onCancel={handleDetailsCancel}
-      >
-        <Form {...layout} form={form} name="control-hooks">
-          <Form.Item
-            name="createdAt"
-            label="Data Creazione"
-            rules={[{ required: true }]}
-          >
-            <Input defaultValue={createdAt} />
-          </Form.Item>
-          <Form.Item name="name" label="Nome" rules={[{ required: true }]}>
-            <Input defaultValue={name} />
-          </Form.Item>
-          <Form.Item
-            name="upload"
-            label="Upload"
-            valuePropName="fileList"
-            getValueFromEvent={normFile}
-          >
-            <Upload
-              multiple={false}
-              maxCount={1}
-              name="logo"
-              listType="picture"
-              beforeUpload={(file) => {
-                const reader = new FileReader();
-                reader.readAsDataURL(file);
-                reader.onload = () => {
-                  form.setFieldValue("picture", reader.result);
-                };
-                return false;
-              }}
-            >
-              <Button icon={<UploadOutlined />}>Upload</Button>
-            </Upload>
-          </Form.Item>
-          <Form.Item
-            name="sellerId"
-            label="Venditore"
-            rules={[{ required: true }]}
-          >
-            <Input defaultValue={sellerId} />
-          </Form.Item>
-          <Form.Item
-            name="description"
-            label="Descrizione"
-            rules={[{ required: true }]}
-          >
-            <TextArea rows={15} defaultValue={description} />
-          </Form.Item>
-          <Form.Item name="buyUrl" label="Url" rules={[{ required: true }]}>
-            <Input defaultValue={buyUrl} />
-          </Form.Item>
-        </Form>
-        <Button
-          style={{ margin: 10 }}
-          onClick={() => handleUpdateArticlesClick(detailId)}
-          type="primary"
-        >
-          Salva modifiche
-        </Button>
-      </Modal>
+        onClose={handleCloseDetailModal}
+        method="update"
+        id={detailId}
+        createdAt={createdAt}
+        name={name}
+        sellerId={sellerId}
+        description={description}
+        buyUrl={buyUrl}
+      />
     </>
   );
 }
